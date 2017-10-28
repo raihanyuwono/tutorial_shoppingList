@@ -12,9 +12,9 @@ import android.widget.TextView;
 
 public class ItemActiveViewHolder extends RecyclerView.ViewHolder {
 
-    private CheckBox itemStatus;
-    private TextView itemName, itemQuantity;
-    private ImageView itemAction;
+    CheckBox itemStatus;
+    TextView itemName, itemQuantity;
+    ImageView itemAction;
 
     public ItemActiveViewHolder(View itemView) {
         super(itemView);
@@ -29,5 +29,6 @@ public class ItemActiveViewHolder extends RecyclerView.ViewHolder {
         this.itemName.setText(itemName);
         this.itemQuantity.setText(itemQuantity);
     }
+
 
 }

@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -57,14 +58,39 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            ShoppingItem currentItem = shoppingItemList.get(position);
+            final ShoppingItem currentItem = shoppingItemList.get(position);
             if (currentItem.getTimeStamp() == -1) return;
             else if (currentItem.isCompleted()) {
                 ItemInactiveViewHolder newHolder = (ItemInactiveViewHolder) holder;
                 newHolder.bind(currentItem.getName());
+                newHolder.itemAction.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        onChangeItem(currentItem, false);
+                    }
+                });
             } else {
                 ItemActiveViewHolder newHolder = (ItemActiveViewHolder) holder;
                 newHolder.bind(currentItem.getName(), currentItem.getQuantity());
+                newHolder.itemStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                        if (checked) {
+                            onChangeItem(currentItem, true);
+                        }
+                    }
+                });
+                newHolder.itemAction.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(MainActivity.this, ItemActivity.class);
+                        intent.putExtra("TITLE", "Edit Item");
+                        intent.putExtra("ITEM_NAME", currentItem.getName());
+                        intent.putExtra("ITEM_QUANTITY", currentItem.getQuantity());
+                        intent.putExtra("ITEM_ID", currentItem.getId());
+                        startActivityForResult(intent, 1);
+                    }
+                });
             }
         }
 
@@ -135,5 +161,14 @@ public class MainActivity extends AppCompatActivity {
             initializedShoppingItemList();
             shoppingItemsAdapter.notifyDataSetChanged();
         }
+    }
+
+    private void onChangeItem(ShoppingItem currentItem, boolean checked) {
+        dbRealm.beginTransaction();
+        currentItem.setCompleted(checked);
+        currentItem.setTimeStamp(System.currentTimeMillis());
+        dbRealm.commitTransaction();
+        initializedShoppingItemList();
+        shoppingItemsAdapter.notifyDataSetChanged();
     }
 }

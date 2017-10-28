@@ -13,9 +13,9 @@ import android.widget.TextView;
 
 public class ItemInactiveViewHolder extends RecyclerView.ViewHolder {
 
-    private CheckBox itemStatus;
-    private TextView itemName;
-    private ImageView itemAction;
+    CheckBox itemStatus;
+    TextView itemName;
+    ImageView itemAction;
 
     public ItemInactiveViewHolder(View itemView) {
         super(itemView);
