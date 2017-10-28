@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -43,16 +44,9 @@ public class MainActivity extends AppCompatActivity {
 
             switch (viewType) {
                 case ITEM_ACTIVE:
-                    return new ItemActiveViewHolder(v,
-                            (CheckBox) v.findViewById(R.id.item_status),
-                            (TextView) v.findViewById(R.id.item_name),
-                            (TextView) v.findViewById(R.id.item_quantity),
-                            (ImageView) v.findViewById(R.id.item_action));
+                    return new ItemActiveViewHolder(v);
                 case ITEM_INACTIVE:
-                    return new ItemInactiveViewHolder(v,
-                            (CheckBox) v.findViewById(R.id.item_status),
-                            (TextView) v.findViewById(R.id.item_name),
-                            (ImageView) v.findViewById(R.id.item_action));
+                    return new ItemInactiveViewHolder(v);
                 case SUBHEADER:
                     return new SubheaderViewHolder(v);
                 default:
@@ -67,13 +61,10 @@ public class MainActivity extends AppCompatActivity {
             if (currentItem.getTimeStamp() == -1) return;
             else if (currentItem.isCompleted()) {
                 ItemInactiveViewHolder newHolder = (ItemInactiveViewHolder) holder;
-                newHolder.itemName.setText(currentItem.getName());
-                newHolder.itemName.setPaintFlags(newHolder.itemName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                newHolder.bind(currentItem.getName());
             } else {
                 ItemActiveViewHolder newHolder = (ItemActiveViewHolder) holder;
-                newHolder.itemName.setText(currentItem.getName());
-                newHolder.itemQuantity.setText(currentItem.getQuantity());
-                newHolder.itemStatus.setChecked(false);
+                newHolder.bind(currentItem.getName(), currentItem.getQuantity());
             }
         }
 
