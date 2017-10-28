@@ -39,30 +39,20 @@ public class ItemActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId()) {
-            case R.id.action_save:
+        if(item.getItemId() == R.id.action_save){
 
-                ShoppingItem shoppingItem = new ShoppingItem(inputItemName.getText().toString(),
-                        inputItemQuantity.getText().toString(),
-                        false,
-                        UUID.randomUUID().toString(),
-                        System.currentTimeMillis());
+            dbRealm.beginTransaction();
 
-                dbRealm.beginTransaction();
-                dbRealm.copyToRealm(shoppingItem);
-                /*ShoppingItem shoppingItem = dbRealm.createObject(ShoppingItem.class);
-                shoppingItem.setName(inputItemName.getText().toString());
-                shoppingItem.setQuantity(inputItemQuantity.getText().toString());
-                shoppingItem.setCompleted(false);
-                shoppingItem.setId(UUID.randomUUID().toString());
-                shoppingItem.setTimeStamp(System.currentTimeMillis());
-                dbRealm.commitTransaction();*/
+            ShoppingItem shoppingItem = dbRealm.createObject(ShoppingItem.class, UUID.randomUUID().toString());
+            shoppingItem.setName(inputItemName.getText().toString());
+            shoppingItem.setQuantity(inputItemQuantity.getText().toString());
+            shoppingItem.setCompleted(false);
+            shoppingItem.setTimeStamp(System.currentTimeMillis());
+            dbRealm.commitTransaction();
 
-                setResult(RESULT_OK);
-                finish();
-                break;
-            default:
-                break;
+            setResult(RESULT_OK);
+            finish();
+
         }
 
         return super.onOptionsItemSelected(item);

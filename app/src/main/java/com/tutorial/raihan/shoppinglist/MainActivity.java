@@ -38,24 +38,22 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-            View v;
+            View v = getLayoutInflater().inflate(viewType == ITEM_ACTIVE ? R.layout.item_active :
+                    viewType == ITEM_INACTIVE ? R.layout.item_inactive : R.layout.subheader, parent, false);
 
             switch (viewType) {
                 case ITEM_ACTIVE:
-                    v = getLayoutInflater().inflate(R.layout.item_active, parent, false);
                     return new ItemActiveViewHolder(v,
                             (CheckBox) v.findViewById(R.id.item_status),
                             (TextView) v.findViewById(R.id.item_name),
                             (TextView) v.findViewById(R.id.item_quantity),
                             (ImageView) v.findViewById(R.id.item_action));
                 case ITEM_INACTIVE:
-                    v = getLayoutInflater().inflate(R.layout.item_inactive, parent, false);
                     return new ItemInactiveViewHolder(v,
                             (CheckBox) v.findViewById(R.id.item_status),
                             (TextView) v.findViewById(R.id.item_name),
                             (ImageView) v.findViewById(R.id.item_action));
                 case SUBHEADER:
-                    v = getLayoutInflater().inflate(R.layout.subheader, parent, false);
                     return new SubheaderViewHolder(v);
                 default:
                     return null;
@@ -102,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
         Realm.init(this);
 
-        RealmConfiguration configuration = new RealmConfiguration.Builder().deleteRealmIfMigrationNeeded().build();
+        RealmConfiguration configuration = new RealmConfiguration.Builder().build();
         Realm.setDefaultConfiguration(configuration);
         dbRealm = Realm.getDefaultInstance();
 
@@ -111,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, ItemActivity.class);
-                intent.putExtra("TITLE", "Add item");
+                intent.putExtra("TITLE", "Add Item");
                 startActivityForResult(intent, 1);
             }
         });

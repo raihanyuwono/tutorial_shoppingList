@@ -37,4 +37,5 @@
             android:textSize="?android:attr/textAppearanceMedium" />
 
     </LinearLayout>
+
 </RelativeLayout>
